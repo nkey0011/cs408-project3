@@ -2,4 +2,5 @@
     <string name="app_name">Web Service Demo</string>
     <string name="http_get">HTTP GET</string>
     <string name="http_post">HTTP POST</string>
+    <string name="input_text">Input Text</string>
 </resources>
