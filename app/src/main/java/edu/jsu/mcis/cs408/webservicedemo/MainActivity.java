@@ -71,14 +71,19 @@ public class MainActivity extends AppCompatActivity {
 
                 userInput = binding.input;
                 String newChat = userInput.getText().toString();
+
                 try {
                     JSONObject jsonInput = new JSONObject(newChat);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
+
+                Object jsonInput = null;
                 model.sendGetRequest();
                 model.sendPostRequest();
+
+                binding.output.setText(newChat);
 
             }
         });
@@ -86,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { model.sendDeleteRequest();
+
+
+            binding.output.setText(" ");
+
 
             }
         });

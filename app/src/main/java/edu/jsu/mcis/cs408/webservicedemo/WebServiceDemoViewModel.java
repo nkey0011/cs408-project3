@@ -184,14 +184,14 @@ public class WebServiceDemoViewModel extends ViewModel {
 
                     conn.setDoOutput(true);
 
-                    /* create username and message params
+                    //create username and message params
                     String username = "NEWUSER";
-                    message =
-                     */
+                    Object message = userInput;
+
 
                     // Create example parameters (these will be echoed back by the API)
 
-                    String p = "name=Jack+Flack&userid=2001";
+                    String p = username + ": " + message;
 
 
 
