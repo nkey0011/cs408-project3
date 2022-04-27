@@ -1,8 +1,15 @@
 package edu.jsu.mcis.cs408.webservicedemo;
 
+/*
+when buttons are clicked, gets the messages
+ */
+
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import androidx.annotation.Nullable;
@@ -17,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private WebServiceDemoViewModel model;
+
+    EditText userInput;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         model.getJsonData().observe(this, jsonObserver);
 
         // Set Button Listeners (to initiate GET/POST requests)
-
+        /*
         binding.getButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,14 +61,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+         */
+
         // Set Button Listener (to initiate POST requests)
 
         binding.postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                userInput = binding.input;
+                String newChat = userInput.getText().toString();
+                try {
+                    JSONObject jsonInput = new JSONObject(newChat);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                model.sendGetRequest();
                 model.sendPostRequest();
+
             }
         });
+
+        binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { model.sendDeleteRequest();
+
+            }
+        });
+
+
 
     }
 

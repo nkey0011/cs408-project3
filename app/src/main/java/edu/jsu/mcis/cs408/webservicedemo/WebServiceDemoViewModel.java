@@ -1,6 +1,11 @@
 package edu.jsu.mcis.cs408.webservicedemo;
 
+/*
+handles the GET POST DELETE requests
+ */
+
 import android.util.Log;
+import android.widget.EditText;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -22,13 +27,17 @@ public class WebServiceDemoViewModel extends ViewModel {
 
     private static final String TAG = "WebServiceDemoViewModel";
 
-    private static final String GET_URL = "http://jsonplaceholder.typicode.com/todos/1";
-    private static final String POST_URL = "http://jsonplaceholder.typicode.com/posts";
+    private static final String GET_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
+    private static final String POST_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
+    private static final String DELETE_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
+
+    EditText input;
+
 
     private MutableLiveData<JSONObject> jsonData;
 
     private final ExecutorService requestThreadExecutor;
-    private final Runnable httpGetRequestThread, httpPostRequestThread;
+    private final Runnable httpGetRequestThread, httpPostRequestThread, httpDeleteRequestThread;
     private Future<?> pending;
 
     public WebServiceDemoViewModel() {
@@ -75,6 +84,22 @@ public class WebServiceDemoViewModel extends ViewModel {
 
         };
 
+        httpDeleteRequestThread = new Runnable() {
+            @Override
+            public void run() {
+                /* If a previous request is still pending, cancel it */
+
+                if (pending != null) { pending.cancel(true); }
+
+                /* Begin new request now, but don't wait for it */
+
+                try {
+                    pending = requestThreadExecutor.submit(new HTTPRequestTask("DELETE", DELETE_URL));
+                }
+                catch (Exception e) { Log.e(TAG, " Exception: ", e); }
+            }
+        };
+
     }
 
     // Start GET Request (called from Activity)
@@ -88,6 +113,9 @@ public class WebServiceDemoViewModel extends ViewModel {
     public void sendPostRequest() {
         httpPostRequestThread.run();
     }
+
+    // Start DELETE request (called from Activity)
+    public void sendDeleteRequest(){httpDeleteRequestThread.run();}
 
     // Setter / Getter Methods for JSON LiveData
 
@@ -156,9 +184,16 @@ public class WebServiceDemoViewModel extends ViewModel {
 
                     conn.setDoOutput(true);
 
+                    /* create username and message params
+                    String username = "NEWUSER";
+                    message =
+                     */
+
                     // Create example parameters (these will be echoed back by the API)
 
                     String p = "name=Jack+Flack&userid=2001";
+
+
 
                     // Write parameters to request body
 
