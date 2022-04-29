@@ -43,8 +43,13 @@ public class MainActivity extends AppCompatActivity {
         final Observer<JSONObject> jsonObserver = new Observer<JSONObject>() {
             @Override
             public void onChanged(@Nullable final JSONObject newJSON) {
-                if (newJSON != null)
-                    setOutputText(newJSON.toString());
+                if (newJSON != null) {
+                    try {
+                        setOutputText(newJSON.get("messages").toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         };
 
@@ -66,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
-        String messages = model.sendGetRequest(); // need to use key from JSONdata
-        binding.output.setText(messages);
+        model.sendGetRequest(); // need to use key from JSONdata
 
 
 
@@ -78,26 +82,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
                 userInput = binding.input;
+
                 String newChat = userInput.getText().toString();
-                try {
-                    JSONObject chatInput = new JSONObject(newChat);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
-
-                /*
-
-                Object jsonInput = null;
-
-
-                model.sendGetRequest();
-
-                 */
-                model.sendPostRequest();
-
+                model.sendPostRequest(newChat);
 
             }
         });

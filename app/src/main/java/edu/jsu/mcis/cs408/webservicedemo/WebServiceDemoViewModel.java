@@ -26,17 +26,11 @@ public class WebServiceDemoViewModel extends ViewModel {
 
     private static final String TAG = "WebServiceDemoViewModel";
 
-    private static final String GET_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/Chat";
-    private static final String POST_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
-    private static final String DELETE_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
+    private static final String URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/Chat";
 
-    String username = "Frodo";
-    Object message = "message"; // need to grab userinput from MainActivity
+    private static final String USERNAME = "Frodo";
 
-
-
-
-
+    private String message; // need to grab userinput from MainActivity
 
     private MutableLiveData<JSONObject> jsonData;
 
@@ -60,7 +54,7 @@ public class WebServiceDemoViewModel extends ViewModel {
                 /* Begin new request now, but don't wait for it */
 
                 try {
-                    pending = requestThreadExecutor.submit(new HTTPRequestTask("GET", GET_URL));
+                    pending = requestThreadExecutor.submit(new HTTPRequestTask("GET", URL));
                 }
                 catch (Exception e) { Log.e(TAG, " Exception: ", e); }
 
@@ -80,7 +74,7 @@ public class WebServiceDemoViewModel extends ViewModel {
                 /* Begin new request now, but don't wait for it */
 
                 try {
-                    pending = requestThreadExecutor.submit(new HTTPRequestTask("POST", POST_URL));
+                    pending = requestThreadExecutor.submit(new HTTPRequestTask("POST", URL));
                 }
                 catch (Exception e) { Log.e(TAG, " Exception: ", e); }
 
@@ -98,7 +92,7 @@ public class WebServiceDemoViewModel extends ViewModel {
                 /* Begin new request now, but don't wait for it */
 
                 try {
-                    pending = requestThreadExecutor.submit(new HTTPRequestTask("DELETE", DELETE_URL));
+                    pending = requestThreadExecutor.submit(new HTTPRequestTask("DELETE", URL));
                 }
                 catch (Exception e) { Log.e(TAG, " Exception: ", e); }
             }
@@ -108,25 +102,27 @@ public class WebServiceDemoViewModel extends ViewModel {
 
     // Start GET Request (called from Activity)
 
-    public String sendGetRequest() {
+    public void sendGetRequest() {
         httpGetRequestThread.run();
-        return null;
     }
 
     // Start POST Request (called from Activity)
 
-    public void sendPostRequest() {
+    public void sendPostRequest(String m) {
+        setMessage(m);
         httpPostRequestThread.run();
     }
 
     // Start DELETE request (called from Activity)
-    public void sendDeleteRequest(){httpDeleteRequestThread.run();}
+    public void sendDeleteRequest(){ httpDeleteRequestThread.run();}
 
     // Setter / Getter Methods for JSON LiveData
 
     private void setJsonData(JSONObject json) {
         this.getJsonData().postValue(json);
     }
+
+    public void setMessage(String m) { this.message = m; }
 
     public MutableLiveData<JSONObject> getJsonData() {
         if (jsonData == null) {
@@ -191,9 +187,9 @@ public class WebServiceDemoViewModel extends ViewModel {
 
                     // Create example parameters (these will be echoed back by the API)
 
-                    String p = username + ": " + message;
+                    //String p = username + ": " + message;
 
-
+                    String p = "{\"name\":\"" + USERNAME + "\", \"message\":\"" + message + "\"}";
 
                     // Write parameters to request body
 
