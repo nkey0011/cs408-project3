@@ -5,7 +5,6 @@ handles the GET POST DELETE requests
  */
 
 import android.util.Log;
-import android.widget.EditText;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,11 +26,16 @@ public class WebServiceDemoViewModel extends ViewModel {
 
     private static final String TAG = "WebServiceDemoViewModel";
 
-    private static final String GET_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
+    private static final String GET_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/Chat";
     private static final String POST_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
     private static final String DELETE_URL = "http://ec2-3-143-211-101.us-east-2.compute.amazonaws.com/CS408_SimpleChat/";
 
-    EditText input;
+    String username = "Frodo";
+    Object message = "message"; // need to grab userinput from MainActivity
+
+
+
+
 
 
     private MutableLiveData<JSONObject> jsonData;
@@ -104,8 +108,9 @@ public class WebServiceDemoViewModel extends ViewModel {
 
     // Start GET Request (called from Activity)
 
-    public void sendGetRequest() {
+    public String sendGetRequest() {
         httpGetRequestThread.run();
+        return null;
     }
 
     // Start POST Request (called from Activity)
@@ -184,11 +189,6 @@ public class WebServiceDemoViewModel extends ViewModel {
 
                     conn.setDoOutput(true);
 
-                    //create username and message params
-                    String username = "NEWUSER";
-                    Object message = userInput;
-
-
                     // Create example parameters (these will be echoed back by the API)
 
                     String p = username + ": " + message;
@@ -258,5 +258,7 @@ public class WebServiceDemoViewModel extends ViewModel {
         }
 
     }
+
+
 
 }

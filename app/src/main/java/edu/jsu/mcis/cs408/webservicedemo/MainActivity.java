@@ -52,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         model.getJsonData().observe(this, jsonObserver);
 
-        // Set Button Listeners (to initiate GET/POST requests)
-        /*
+        /* Set Button Listeners (to initiate GET/POST requests)
+        using to test GET, remember to delete button
+
+
         binding.getButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,27 +65,39 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
+
+        String messages = model.sendGetRequest(); // need to use key from JSONdata
+        binding.output.setText(messages);
+
+
+
+
         // Set Button Listener (to initiate POST requests)
 
         binding.postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+
                 userInput = binding.input;
                 String newChat = userInput.getText().toString();
-
                 try {
-                    JSONObject jsonInput = new JSONObject(newChat);
+                    JSONObject chatInput = new JSONObject(newChat);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
+                /*
+
                 Object jsonInput = null;
+
+
                 model.sendGetRequest();
+
+                 */
                 model.sendPostRequest();
 
-                binding.output.setText(newChat);
 
             }
         });
